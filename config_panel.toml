@@ -2,29 +2,20 @@ version = "1.0"
 
 [main]
 name = "Pluto.jl"
-help = """Access permissions
-- Access is handled by YunoHost permissions.
-- By default, no one can access this instance.
-- Notebooks are stored per instance in /var/lib/__APP__/notebooks.
-- Pluto runs without its own secret token (YunoHost auth only)."""
 
-[main.status]
-name = "Status"
-help = ""
-
-[main.status.public_url]
+[main.public_url]
 type = "text"
 ask = "Public URL"
 readonly = true
 bind = "null"
 
-[main.status.internal_port]
+[main.internal_port]
 type = "text"
 ask = "Internal port"
 readonly = true
 bind = "null"
 
-[main.status.notebooks_dir]
+[main.notebooks_dir]
 type = "text"
 ask = "Notebooks directory"
 readonly = true
