@@ -54,5 +54,8 @@ ram.runtime = "512M"
     [resources.permissions]
     main.url = "/"
 
+    [resources.ports]
+    main.default = 1234
+
     [resources.apt]
     packages = ["curl", "ca-certificates"]

@@ -6,8 +6,7 @@ source "$(dirname "$0")/_common.sh"
 
 _ensure_julia_available
 
-port="$(_find_free_port 1234)"
-ynh_app_setting_set --app="$app" --key=port --value="$port"
+port="$(ynh_app_setting_get --app="$app" --key=port)"
 ynh_app_setting_set --app="$app" --key=depot_dir --value="$depot_dir"
 
 mkdir -p "$install_dir" "$data_dir" "$depot_dir"
@@ -23,7 +22,7 @@ _replace_in_file "__PORT__" "$port" "$run_script"
 chmod 755 "$run_script"
 chown "$app:$app" "$run_script"
 
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 systemd_conf="$YNH_APP_BASEDIR/conf/systemd.service"
 _replace_in_file "__PORT__" "$port" "$systemd_conf"
@@ -32,6 +31,6 @@ _replace_in_file "__INSTALL_DIR__" "$install_dir" "$systemd_conf"
 _replace_in_file "__DATA_DIR__" "$data_dir" "$systemd_conf"
 _replace_in_file "__DEPOT_DIR__" "$depot_dir" "$systemd_conf"
 _replace_in_file "__APP_HOME__" "$app_home" "$systemd_conf"
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 ynh_systemd_action --service_name="$app" --action="start"

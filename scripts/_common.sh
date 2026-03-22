@@ -12,14 +12,6 @@ depot_dir="${depot_dir:-$app_home/julia_depot}"
 julia_bin="/usr/local/bin/julia"
 juliaup_bin="/usr/local/bin/juliaup"
 
-_find_free_port() {
-  local port="${1:-1234}"
-  while ss -lnt "sport = :$port" | grep -q LISTEN; do
-    port=$((port + 1))
-  done
-  echo "$port"
-}
-
 _replace_in_file() {
   local search="$1"
   local replace="$2"
