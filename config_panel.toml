@@ -1,12 +1,10 @@
 version = "1.0"
 
 [main]
-name.en = "Pluto.jl"
-name.fr = "Pluto.jl"
+name = "Pluto.jl"
 
 [main.info]
-name.en = "Info"
-name.fr = "Infos"
+name = "Info"
 
 [main.info.notes]
 type = "alert"
@@ -25,8 +23,7 @@ ask.fr = """Permissions d'accès
 - Pluto s'exécute sans jeton secret (auth YunoHost uniquement)."""
 
 [main.status]
-name.en = "Status"
-name.fr = "Statut"
+name = "Status"
 
 [main.status.public_url]
 type = "text"
