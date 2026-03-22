@@ -17,6 +17,8 @@ help.fr = """Permissions d'accès
 [main.status]
 name.en = "Status"
 name.fr = "Statut"
+help.en = ""
+help.fr = ""
 
 [main.status.public_url]
 type = "text"
