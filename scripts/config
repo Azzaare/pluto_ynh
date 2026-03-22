@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+action="${1:-show}"
+export YNH_APP_ACTION="$action"
+
+set -u
+
+# shellcheck disable=SC1090
+source "$(dirname "$0")/_common.sh"
+
+get__public_url() {
+  local domain path
+  domain="$(ynh_app_setting_get --app="$app" --key=domain)"
+  path="$(ynh_app_setting_get --app="$app" --key=path)"
+  echo "https://${domain}${path}"
+}
+
+get__internal_port() {
+  ynh_app_setting_get --app="$app" --key=port
+}
+
+get__notebooks_dir() {
+  echo "$data_dir"
+}
+
+ynh_app_config_run "$action"

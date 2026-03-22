@@ -1,0 +1,21 @@
+#!/bin/bash
+set -eu
+
+# shellcheck disable=SC1090
+source "$(dirname "$0")/_common.sh"
+
+ynh_restore_file --origin_path="$install_dir" --not_mandatory
+ynh_restore_file --origin_path="$data_dir" --not_mandatory
+ynh_restore_file --origin_path="$depot_dir" --not_mandatory
+
+if [ -d "$install_dir" ]; then
+  chown -R "$app:$app" "$install_dir"
+fi
+
+if [ -d "$data_dir" ]; then
+  chown -R "$app:$app" "$data_dir"
+fi
+
+if [ -d "$depot_dir" ]; then
+  chown -R "$app:$app" "$depot_dir"
+fi

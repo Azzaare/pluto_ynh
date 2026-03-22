@@ -1,0 +1,37 @@
+#!/bin/bash
+set -eu
+
+# shellcheck disable=SC1090
+source "$(dirname "$0")/_common.sh"
+
+_ensure_julia_available
+
+port="$(ynh_find_port --port=1234)"
+ynh_app_setting_set --app="$app" --key=port --value="$port"
+ynh_app_setting_set --app="$app" --key=depot_dir --value="$depot_dir"
+
+mkdir -p "$install_dir" "$data_dir" "$depot_dir"
+chown -R "$app:$app" "$install_dir" "$data_dir" "$depot_dir"
+
+_pluto_install_deps
+
+run_script="$install_dir/run"
+cp "$YNH_APP_BASEDIR/conf/run.sh" "$run_script"
+ynh_replace_string "__JULIA_BIN__" "$julia_bin" "$run_script"
+ynh_replace_string "__INSTALL_DIR__" "$install_dir" "$run_script"
+ynh_replace_string "__PORT__" "$port" "$run_script"
+chmod 755 "$run_script"
+chown "$app:$app" "$run_script"
+
+ynh_add_nginx_config
+
+systemd_conf="$YNH_APP_BASEDIR/conf/systemd.service"
+ynh_replace_string "__PORT__" "$port" "$systemd_conf"
+ynh_replace_string "__JULIA_BIN__" "$julia_bin" "$systemd_conf"
+ynh_replace_string "__INSTALL_DIR__" "$install_dir" "$systemd_conf"
+ynh_replace_string "__DATA_DIR__" "$data_dir" "$systemd_conf"
+ynh_replace_string "__DEPOT_DIR__" "$depot_dir" "$systemd_conf"
+ynh_replace_string "__APP_HOME__" "$app_home" "$systemd_conf"
+ynh_add_systemd_config
+
+ynh_systemd_action --service_name="$app" --action="start"

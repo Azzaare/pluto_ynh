@@ -1,0 +1,58 @@
+packaging_format = 2
+
+id = "pluto"
+name = "Pluto.jl"
+description.en = "Reactive Julia notebooks served through YunoHost"
+description.fr = "Notebooks Julia réactifs servis via YunoHost"
+version = "0.1.0~ynh1"
+maintainers = ["Azzaare"]
+
+[upstream]
+license = "MIT"
+website = "https://plutojl.org"
+code = "https://github.com/fonsp/Pluto.jl"
+
+[integration]
+yunohost = ">= 11.2"
+helpers_version = "2.1"
+architectures = ["amd64", "arm64"]
+multi_instance = true
+ldap = "not_relevant"
+sso = "yes"
+disk = "1G"
+ram.build = "256M"
+ram.runtime = "512M"
+
+[install]
+
+    [install.domain]
+    type = "domain"
+    ask.en = "Choose a domain name for Pluto"
+    ask.fr = "Choisissez un nom de domaine pour Pluto"
+
+    [install.path]
+    type = "path"
+    ask.en = "Choose a path for Pluto"
+    ask.fr = "Choisissez un chemin pour Pluto"
+    default = "/pluto"
+
+[resources]
+
+    [resources.system_user]
+    home = "/var/lib/__APP__"
+
+    [resources.install_dir]
+    dir = "/var/lib/__APP__/pluto"
+    owner = "__APP__:rwx"
+    group = "__APP__:rx"
+
+    [resources.data_dir]
+    dir = "/var/lib/__APP__/notebooks"
+    owner = "__APP__:rwx"
+    group = "__APP__:rx"
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = ["curl", "ca-certificates"]
