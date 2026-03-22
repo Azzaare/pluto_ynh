@@ -5,6 +5,10 @@ name.en = "Pluto.jl"
 name.fr = "Pluto.jl"
 
 [main.info]
+name.en = "Info"
+name.fr = "Infos"
+
+[main.info.notes]
 type = "alert"
 style = "info"
 ask.en = """Access permissions
