@@ -6,7 +6,7 @@ source "$(dirname "$0")/_common.sh"
 
 _ensure_julia_available
 
-port="$(ynh_find_port --port=1234)"
+port="$(_find_free_port 1234)"
 ynh_app_setting_set --app="$app" --key=port --value="$port"
 ynh_app_setting_set --app="$app" --key=depot_dir --value="$depot_dir"
 
