@@ -4,6 +4,6 @@ set -eu
 # shellcheck disable=SC1090
 source "$(dirname "$0")/_common.sh"
 
-ynh_systemd_action --service_name="$app" --action="stop" --quiet || true
+ynh_systemctl --service="$app" --action="stop" || true
 ynh_config_remove_systemd
 ynh_config_remove_nginx

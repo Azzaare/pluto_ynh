@@ -33,4 +33,4 @@ _replace_in_file "__DEPOT_DIR__" "$depot_dir" "$systemd_conf"
 _replace_in_file "__APP_HOME__" "$app_home" "$systemd_conf"
 ynh_config_add_systemd
 
-ynh_systemd_action --service_name="$app" --action="start"
+ynh_systemctl --service="$app" --action="start"
