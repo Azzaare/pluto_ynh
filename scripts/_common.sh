@@ -20,6 +20,13 @@ _find_free_port() {
   echo "$port"
 }
 
+_replace_in_file() {
+  local search="$1"
+  local replace="$2"
+  local file="$3"
+  sed -i "s|$search|$replace|g" "$file"
+}
+
 _ensure_julia_available() {
   if ! command -v "$julia_bin" >/dev/null 2>&1; then
     ynh_die --message="Julia runtime not found. Please install julia_ynh first."
