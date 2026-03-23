@@ -29,7 +29,6 @@ ask.fr = "URL publique"
 default.en = "/pluto"
 default.fr = "/pluto"
 readonly = true
-bind = "domain.path"
 
 [main.internal_port]
 type = "number"
@@ -38,7 +37,6 @@ ask.fr = "Port interne"
 default.en = 8080
 default.fr = 8080
 readonly = true
-bind = "main.port"
 
 [main.notebooks_dir]
 type = "text"
@@ -47,4 +45,3 @@ ask.fr = "Répertoire des notebooks"
 default.en = "/var/lib/__APP__/notebooks"
 default.fr = "/var/lib/__APP__/notebooks"
 readonly = true
-bind = "install_dir"
