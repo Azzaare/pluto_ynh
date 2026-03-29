@@ -12,16 +12,26 @@ depot_dir="${depot_dir:-$app_home/julia_depot}"
 julia_bin="/usr/local/bin/julia"
 juliaup_bin="/usr/local/bin/juliaup"
 
-_replace_in_file() {
-  local search="$1"
-  local replace="$2"
-  local file="$3"
-  sed -i "s|$search|$replace|g" "$file"
-}
-
 _ensure_julia_available() {
   if ! command -v "$julia_bin" >/dev/null 2>&1; then
     ynh_die --message="Julia runtime not found. Please install julia_ynh first."
+  fi
+}
+
+_app_path() {
+  local path
+  path="$(ynh_app_setting_get --app="$app" --key=path 2>/dev/null || echo "/pluto")"
+  ynh_normalize_url_path "${path:-/pluto}"
+}
+
+_public_url() {
+  local domain path
+  domain="$(ynh_app_setting_get --app="$app" --key=domain)"
+  path="$(_app_path)"
+  if [ "$path" = "/" ]; then
+    echo "https://${domain}/"
+  else
+    echo "https://${domain}${path}"
   fi
 }
 

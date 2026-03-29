@@ -10,10 +10,7 @@ set -u
 source "$(dirname "$0")/_common.sh"
 
 get__public_url() {
-  local domain path
-  domain="$(ynh_app_setting_get --app="$app" --key=domain)"
-  path="$(ynh_app_setting_get --app="$app" --key=path)"
-  echo "https://${domain}${path}"
+  _public_url
 }
 
 get__internal_port() {
