@@ -4,7 +4,7 @@ id = "pluto"
 name = "Pluto.jl"
 description.en = "Reactive Julia notebooks served through YunoHost"
 description.fr = "Notebooks Julia réactifs servis via YunoHost"
-version = "0.1.0~ynh5"
+version = "0.1.0~ynh6"
 maintainers = ["Azzaare"]
 
 [upstream]

@@ -3,20 +3,6 @@ version = "1.0"
 [main]
 name.en = "Pluto.jl"
 
-[main.info]
-name.en = "Notes"
-
-[main.info.notes]
-type = "alert"
-style = "info"
-ask.en = """Access permissions
-
-- Access is handled by YunoHost permissions.
-- By default, no one can access this instance.
-- Notebooks are stored per instance in /var/lib/__APP__/notebooks.
-- Pluto runs without its own secret token (YunoHost auth only).
-- Runtime uses a local writable depot layered on top of the shared public Julia depot from `julia_ynh`."""
-
 [main.runtime]
 name.en = "Runtime"
 
@@ -24,16 +10,19 @@ name.en = "Runtime"
 type = "text"
 ask.en = "Public URL"
 readonly = true
+bind = "null"
 
 [main.runtime.internal_port]
 type = "number"
 ask.en = "Internal port"
 readonly = true
+bind = "null"
 
 [main.runtime.notebooks_dir]
 type = "text"
 ask.en = "Notebooks directory"
 readonly = true
+bind = "null"
 
 [main.actions]
 name.en = "Package actions"
