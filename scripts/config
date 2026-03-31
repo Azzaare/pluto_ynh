@@ -21,4 +21,13 @@ get__notebooks_dir() {
   echo "$data_dir"
 }
 
+get__update_environment() {
+  echo ""
+}
+
+run__update_environment() {
+  _pluto_update_deps
+  ynh_systemctl --service="$app" --action="restart"
+}
+
 ynh_app_config_run "$action"

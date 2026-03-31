@@ -2,11 +2,11 @@ version = "1.0"
 
 [main]
 name.en = "Pluto.jl"
-name.fr = "Pluto.jl"
-description.en = "A Julia notebook environment for YunoHost"
-description.fr = "Un environnement de notebooks Julia pour YunoHost"
 
 [main.info]
+name.en = "Notes"
+
+[main.info.notes]
 type = "alert"
 style = "info"
 ask.en = """Access permissions
@@ -15,33 +15,34 @@ ask.en = """Access permissions
 - By default, no one can access this instance.
 - Notebooks are stored per instance in /var/lib/__APP__/notebooks.
 - Pluto runs without its own secret token (YunoHost auth only)."""
-ask.fr = """Permissions d'accès
 
-- L'accès est géré via les permissions YunoHost.
-- Par défaut, personne n'a accès à cette instance.
-- Les notebooks sont stockés par instance dans /var/lib/__APP__/notebooks.
-- Pluto s'exécute sans jeton secret (auth YunoHost uniquement)."""
+[main.runtime]
+name.en = "Runtime"
 
-[main.public_url]
+[main.runtime.public_url]
 type = "text"
 ask.en = "Public URL"
-ask.fr = "URL publique"
 default.en = "/pluto"
-default.fr = "/pluto"
 readonly = true
 
-[main.internal_port]
+[main.runtime.internal_port]
 type = "number"
 ask.en = "Internal port"
-ask.fr = "Port interne"
 default.en = 8080
-default.fr = 8080
 readonly = true
 
-[main.notebooks_dir]
+[main.runtime.notebooks_dir]
 type = "text"
 ask.en = "Notebooks directory"
-ask.fr = "Répertoire des notebooks"
 default.en = "/var/lib/__APP__/notebooks"
-default.fr = "/var/lib/__APP__/notebooks"
 readonly = true
+
+[main.actions]
+name.en = "Package actions"
+
+[main.actions.update_environment]
+type = "button"
+ask.en = "Update Julia environment"
+style = "info"
+icon = "flask"
+bind = "null"

@@ -45,5 +45,5 @@ _pluto_install_deps() {
 
 _pluto_update_deps() {
   ynh_exec_as_app env JULIA_DEPOT_PATH="$depot_dir" \
-    "$julia_bin" --project="$install_dir" -e 'using Pkg; Pkg.update()'
+    "$julia_bin" --project="$install_dir" -e 'using Pkg; Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
 }
