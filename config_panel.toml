@@ -23,19 +23,16 @@ name.en = "Runtime"
 [main.runtime.public_url]
 type = "text"
 ask.en = "Public URL"
-default.en = "/pluto"
 readonly = true
 
 [main.runtime.internal_port]
 type = "number"
 ask.en = "Internal port"
-default.en = 8080
 readonly = true
 
 [main.runtime.notebooks_dir]
 type = "text"
 ask.en = "Notebooks directory"
-default.en = "/var/lib/__APP__/notebooks"
 readonly = true
 
 [main.actions]
