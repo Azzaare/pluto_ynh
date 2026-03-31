@@ -14,7 +14,8 @@ ask.en = """Access permissions
 - Access is handled by YunoHost permissions.
 - By default, no one can access this instance.
 - Notebooks are stored per instance in /var/lib/__APP__/notebooks.
-- Pluto runs without its own secret token (YunoHost auth only)."""
+- Pluto runs without its own secret token (YunoHost auth only).
+- Runtime uses a local writable depot layered on top of the shared public Julia depot from `julia_ynh`."""
 
 [main.runtime]
 name.en = "Runtime"

@@ -9,6 +9,8 @@ app_home="/var/lib/$app"
 install_dir="${install_dir:-$app_home/pluto}"
 data_dir="${data_dir:-$app_home/notebooks}"
 depot_dir="${depot_dir:-$app_home/julia_depot}"
+julia_public_depot="/var/lib/julia/.julia"
+juliaup_depot="/var/lib/julia/.julia"
 julia_bin="/usr/local/bin/julia"
 juliaup_bin="/usr/local/bin/juliaup"
 
@@ -16,6 +18,20 @@ _ensure_julia_available() {
   if ! command -v "$julia_bin" >/dev/null 2>&1; then
     ynh_die --message="Julia runtime not found. Please install julia_ynh first."
   fi
+}
+
+_runtime_depot_path() {
+  printf '%s:%s' "$depot_dir" "$julia_public_depot"
+}
+
+_pkg_depot_path() {
+  printf '%s:%s' "$julia_public_depot" "$depot_dir"
+}
+
+_normalize_shared_public_depot_permissions() {
+  mkdir -p "$julia_public_depot"
+  chown -R julia:julia "$julia_public_depot"
+  chmod -R a+rX "$julia_public_depot"
 }
 
 _app_path() {
@@ -39,11 +55,29 @@ _pluto_install_deps() {
   mkdir -p "$depot_dir"
   chown -R "$app:$app" "$depot_dir"
 
-  ynh_exec_as_app env JULIA_DEPOT_PATH="$depot_dir" \
-    "$julia_bin" --project="$install_dir" -e 'using Pkg; Pkg.add("Pluto")'
+  _normalize_shared_public_depot_permissions
+
+  env \
+    HOME="/root" \
+    JULIAUP_DEPOT_PATH="$juliaup_depot" \
+    JULIA_DEPOT_PATH="$(_pkg_depot_path)" \
+    JULIA_PKG_PRECOMPILE_AUTO=0 \
+    "$julia_bin" --project="$install_dir" --startup-file=no -e 'using Pkg; Pkg.add("Pluto"); Pkg.instantiate(); Pkg.precompile()'
+
+  _normalize_shared_public_depot_permissions
+  chown -R "$app:$app" "$depot_dir"
 }
 
 _pluto_update_deps() {
-  ynh_exec_as_app env JULIA_DEPOT_PATH="$depot_dir" \
-    "$julia_bin" --project="$install_dir" -e 'using Pkg; Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
+  _normalize_shared_public_depot_permissions
+
+  env \
+    HOME="/root" \
+    JULIAUP_DEPOT_PATH="$juliaup_depot" \
+    JULIA_DEPOT_PATH="$(_pkg_depot_path)" \
+    JULIA_PKG_PRECOMPILE_AUTO=0 \
+    "$julia_bin" --project="$install_dir" --startup-file=no -e 'using Pkg; Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
+
+  _normalize_shared_public_depot_permissions
+  chown -R "$app:$app" "$depot_dir"
 }

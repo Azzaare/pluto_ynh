@@ -8,7 +8,8 @@ User=__APP__
 Group=__APP__
 WorkingDirectory=__DATA_DIR__
 Environment="HOME=__APP_HOME__"
-Environment="JULIA_DEPOT_PATH=__DEPOT_DIR__"
+Environment="JULIAUP_DEPOT_PATH=/var/lib/julia/.julia"
+Environment="JULIA_DEPOT_PATH=__DEPOT_DIR__:/var/lib/julia/.julia"
 Environment="JULIA_PROJECT=__INSTALL_DIR__"
 ExecStart=__INSTALL_DIR__/run
 Restart=on-failure
