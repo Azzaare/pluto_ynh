@@ -3,7 +3,7 @@ packaging_format = 2
 id = "pluto"
 name = "Pluto.jl"
 description.en = "Reactive Julia notebooks served through YunoHost"
-version = "0.1.0~ynh10"
+version = "0.1.0~ynh11"
 maintainers = ["Azzaare"]
 
 [upstream]

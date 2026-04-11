@@ -29,11 +29,12 @@ _pkg_depot_path() {
 }
 
 _normalize_shared_public_depot_permissions() {
-  mkdir -p "$julia_public_depot"
+  mkdir -p "$julia_public_depot" "$julia_public_depot/juliaup"
   chown -R julia:julia "$julia_public_depot"
   find "$julia_public_depot" -type d -exec chmod 755 {} \; 2>/dev/null || true
   chmod -R a+rX "$julia_public_depot" 2>/dev/null || true
   chmod -R go-w "$julia_public_depot" 2>/dev/null || true
+  chmod 1777 "$julia_public_depot/juliaup"
   if [ -d "$julia_public_depot/logs" ]; then
     chmod 1777 "$julia_public_depot/logs"
   fi
