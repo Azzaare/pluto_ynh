@@ -17,7 +17,12 @@ ynh_script_progression "Updating Pluto Julia dependencies..."
 _pluto_update_deps
 
 run_script="$install_dir/run"
-ynh_config_add --template="run.sh" --destination="$run_script"
+cp "$YNH_APP_BASEDIR/conf/run.sh" "$run_script"
+ynh_replace --match="__JULIA_BIN__" --replace="$julia_bin" --file="$run_script"
+ynh_replace --match="__APP_HOME__" --replace="$app_home" --file="$run_script"
+ynh_replace --match="__DEPOT_DIR__" --replace="$depot_dir" --file="$run_script"
+ynh_replace --match="__INSTALL_DIR__" --replace="$install_dir" --file="$run_script"
+ynh_replace --match="__PORT__" --replace="$port" --file="$run_script"
 chmod 755 "$run_script"
 chown "$app:$app" "$run_script"
 
