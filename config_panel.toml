@@ -1,35 +1,35 @@
 version = "1.0"
 
 [main]
-name.en = "Pluto.jl"
+name = "Pluto.jl"
 
 [main.runtime]
-name.en = "Runtime"
+name = "Runtime"
 
 [main.runtime.public_url]
 type = "text"
-ask.en = "Public URL"
+ask = "Public URL"
 readonly = true
 bind = "null"
 
 [main.runtime.internal_port]
 type = "number"
-ask.en = "Internal port"
+ask = "Internal port"
 readonly = true
 bind = "null"
 
 [main.runtime.notebooks_dir]
 type = "text"
-ask.en = "Notebooks directory"
+ask = "Notebooks directory"
 readonly = true
 bind = "null"
 
 [main.actions]
-name.en = "Package actions"
+name = "Package actions"
 
 [main.actions.update_environment]
 type = "button"
-ask.en = "Update Julia environment"
+ask = "Update Julia environment"
 style = "info"
 icon = "flask"
 bind = "null"

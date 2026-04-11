@@ -31,7 +31,18 @@ _pkg_depot_path() {
 _normalize_shared_public_depot_permissions() {
   mkdir -p "$julia_public_depot"
   chown -R julia:julia "$julia_public_depot"
-  chmod -R a+rX "$julia_public_depot"
+  find "$julia_public_depot" -type d -exec chmod 755 {} \; 2>/dev/null || true
+  chmod -R a+rX "$julia_public_depot" 2>/dev/null || true
+  chmod -R go-w "$julia_public_depot" 2>/dev/null || true
+  if [ -d "$julia_public_depot/logs" ]; then
+    chmod 1777 "$julia_public_depot/logs"
+  fi
+}
+
+_normalize_instance_depot_permissions() {
+  mkdir -p "$depot_dir"
+  chown -R "$app:$app" "$depot_dir"
+  chmod 700 "$depot_dir"
 }
 
 _app_path() {
@@ -52,9 +63,7 @@ _public_url() {
 }
 
 _pluto_install_deps() {
-  mkdir -p "$depot_dir"
-  chown -R "$app:$app" "$depot_dir"
-
+  _normalize_instance_depot_permissions
   _normalize_shared_public_depot_permissions
 
   env \
@@ -65,10 +74,11 @@ _pluto_install_deps() {
     "$julia_bin" --project="$install_dir" --startup-file=no -e 'using Pkg; Pkg.add("Pluto"); Pkg.instantiate(); Pkg.precompile()'
 
   _normalize_shared_public_depot_permissions
-  chown -R "$app:$app" "$depot_dir"
+  _normalize_instance_depot_permissions
 }
 
 _pluto_update_deps() {
+  _normalize_instance_depot_permissions
   _normalize_shared_public_depot_permissions
 
   env \
@@ -79,5 +89,5 @@ _pluto_update_deps() {
     "$julia_bin" --project="$install_dir" --startup-file=no -e 'using Pkg; Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
 
   _normalize_shared_public_depot_permissions
-  chown -R "$app:$app" "$depot_dir"
+  _normalize_instance_depot_permissions
 }
