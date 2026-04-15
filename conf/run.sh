@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-export HOME="__APP_HOME__"
+export HOME="/var/lib/julia"
 export JULIAUP_DEPOT_PATH="/var/lib/julia/.julia"
 export JULIA_DEPOT_PATH="__DEPOT_DIR__:/var/lib/julia/.julia"
 export JULIA_PKG_PRECOMPILE_AUTO=0
