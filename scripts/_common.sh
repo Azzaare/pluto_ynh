@@ -15,6 +15,7 @@ julia_bin="/usr/local/bin/julia"
 juliaup_bin="/usr/local/bin/juliaup"
 
 _ensure_julia_available() {
+  _normalize_shared_public_depot_permissions
   if ! command -v "$julia_bin" >/dev/null 2>&1; then
     ynh_die --message="Julia runtime not found. Please install julia_ynh first."
   fi
@@ -29,17 +30,10 @@ _pkg_depot_path() {
 }
 
 _normalize_shared_public_depot_permissions() {
-  mkdir -p "$julia_public_depot" "$julia_public_depot/juliaup"
-  touch "$julia_public_depot/juliaup/.juliaup-lock"
-  chown -R julia:julia "$julia_public_depot"
-  find "$julia_public_depot" -type d -exec chmod 755 {} \; 2>/dev/null || true
-  chmod -R a+rX "$julia_public_depot" 2>/dev/null || true
-  chmod -R go-w "$julia_public_depot" 2>/dev/null || true
-  chmod 1777 "$julia_public_depot/juliaup"
-  chmod 666 "$julia_public_depot/juliaup/.juliaup-lock"
-  if [ -d "$julia_public_depot/logs" ]; then
-    chmod 1777 "$julia_public_depot/logs"
-  fi
+  local helper="${JULIA_YNH_PERMISSIONS_HELPER:-/usr/local/lib/julia_ynh/runtime-permissions.sh}"
+  [ -r "$helper" ] || helper="$YNH_APP_BASEDIR/conf/julia-runtime-permissions.sh"
+  source "$helper"
+  repair_shared_julia_runtime_permissions "${julia_runtime_home:-/var/lib/julia}" "${julia_runtime_account:-julia}"
 }
 
 _normalize_instance_depot_permissions() {
@@ -65,32 +59,19 @@ _public_url() {
   fi
 }
 
+_pluto_pkg_exec() (
+  trap "_normalize_shared_public_depot_permissions; _normalize_instance_depot_permissions" EXIT
+  _normalize_instance_depot_permissions
+  _normalize_shared_public_depot_permissions
+  env HOME="/root" JULIAUP_DEPOT_PATH="$juliaup_depot" \
+    JULIA_DEPOT_PATH="$(_pkg_depot_path)" JULIA_PKG_PRECOMPILE_AUTO=0 \
+    "$julia_bin" --project="$install_dir" --startup-file=no -e "$1"
+)
+
 _pluto_install_deps() {
-  _normalize_instance_depot_permissions
-  _normalize_shared_public_depot_permissions
-
-  env \
-    HOME="/root" \
-    JULIAUP_DEPOT_PATH="$juliaup_depot" \
-    JULIA_DEPOT_PATH="$(_pkg_depot_path)" \
-    JULIA_PKG_PRECOMPILE_AUTO=0 \
-    "$julia_bin" --project="$install_dir" --startup-file=no -e 'using Pkg; registry_dir = joinpath(first(Base.DEPOT_PATH), "registries", "General"); isdir(registry_dir) || Pkg.Registry.add("General"); Pkg.add("Pluto"); Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
-
-  _normalize_shared_public_depot_permissions
-  _normalize_instance_depot_permissions
+  _pluto_pkg_exec 'using Pkg; registry_dir = joinpath(first(Base.DEPOT_PATH), "registries", "General"); isdir(registry_dir) || Pkg.Registry.add("General"); Pkg.add("Pluto"); Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
 }
 
 _pluto_update_deps() {
-  _normalize_instance_depot_permissions
-  _normalize_shared_public_depot_permissions
-
-  env \
-    HOME="/root" \
-    JULIAUP_DEPOT_PATH="$juliaup_depot" \
-    JULIA_DEPOT_PATH="$(_pkg_depot_path)" \
-    JULIA_PKG_PRECOMPILE_AUTO=0 \
-    "$julia_bin" --project="$install_dir" --startup-file=no -e 'using Pkg; registry_dir = joinpath(first(Base.DEPOT_PATH), "registries", "General"); isdir(registry_dir) || Pkg.Registry.add("General"); Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
-
-  _normalize_shared_public_depot_permissions
-  _normalize_instance_depot_permissions
+  _pluto_pkg_exec 'using Pkg; registry_dir = joinpath(first(Base.DEPOT_PATH), "registries", "General"); isdir(registry_dir) || Pkg.Registry.add("General"); Pkg.instantiate(); Pkg.update(); Pkg.precompile()'
 }

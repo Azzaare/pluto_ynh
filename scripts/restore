@@ -17,3 +17,5 @@ fi
 if [ -d "$depot_dir" ]; then
   chown -R "$app:$app" "$depot_dir"
 fi
+_normalize_shared_public_depot_permissions
+_normalize_instance_depot_permissions
