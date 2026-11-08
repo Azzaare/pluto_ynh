@@ -26,14 +26,12 @@ _runtime_depot_path() {
 }
 
 _pkg_depot_path() {
-  printf '%s:%s' "$julia_public_depot" "$depot_dir"
+  printf '%s' "$depot_dir"
 }
 
 _normalize_shared_public_depot_permissions() {
-  local helper="${JULIA_YNH_PERMISSIONS_HELPER:-/usr/local/lib/julia_ynh/runtime-permissions.sh}"
-  [ -r "$helper" ] || helper="$YNH_APP_BASEDIR/conf/julia-runtime-permissions.sh"
-  source "$helper"
-  repair_shared_julia_runtime_permissions "${julia_runtime_home:-/var/lib/julia}" "${julia_runtime_account:-julia}"
+  [ -x "$julia_bin" ] && [ -d "$juliaup_depot/juliaup" ] ||
+    ynh_die --message="The shared Julia runtime is unavailable; repair julia_ynh."
 }
 
 _normalize_instance_depot_permissions() {
@@ -63,7 +61,7 @@ _pluto_pkg_exec() (
   trap "_normalize_shared_public_depot_permissions; _normalize_instance_depot_permissions" EXIT
   _normalize_instance_depot_permissions
   _normalize_shared_public_depot_permissions
-  env HOME="/root" JULIAUP_DEPOT_PATH="$juliaup_depot" \
+  ynh_exec_as_app env HOME="$app_home" JULIAUP_DEPOT_PATH="$juliaup_depot" \
     JULIA_DEPOT_PATH="$(_pkg_depot_path)" JULIA_PKG_PRECOMPILE_AUTO=0 \
     "$julia_bin" --project="$install_dir" --startup-file=no -e "$1"
 )
